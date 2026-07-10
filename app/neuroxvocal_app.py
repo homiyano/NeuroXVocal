@@ -5,7 +5,7 @@ from utils import *
 from constants import *
 
 
-RECORDINGS_PATH = Path("/NeuroXVocal/app/recordings")
+RECORDINGS_PATH = Path(__file__).parent / "recordings"
 RECORDINGS_PATH.mkdir(exist_ok=True)
 
 

@@ -23,6 +23,8 @@ def train_model(
 ):
     criterion = BCEWithLogitsLoss()
 
+
+
     kfold = KFold(n_splits=num_folds, shuffle=True)
 
     for fold, (train_indices, val_indices) in enumerate(kfold.split(full_dataset)):
@@ -52,6 +54,8 @@ def train_model(
             lr=learning_rate,
             weight_decay=1e-4
         )
+
+        # learning rate
         scheduler = ReduceLROnPlateau(
             optimizer,
             mode='min',
@@ -152,7 +156,7 @@ def train_model(
 
             scheduler.step(val_loss)
 
-
+            # early-stopping mechanism
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 epochs_no_improve = 0

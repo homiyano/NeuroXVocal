@@ -16,6 +16,9 @@ import shutil
 import whisper
 from constants import *
 
+_APP_DIR = Path(__file__).parent
+_BASE_DIR = _APP_DIR.parent
+
 sys.path.append(EXPLAINER_DIR)
 from data_loader import DataLoader
 from vector_store import VectorStore
@@ -81,7 +84,7 @@ def stop_recording(recordings_path, sample_rate):
 def extract_audio_embeddings(audio_folder):
     """Extracts audio embeddings using the external script"""
     try:
-        script_path = r"/NeuroXVocal/src/data_extraction/extract_audio_embeddings.py"
+        script_path = str(_BASE_DIR / "src" / "data_extraction" / "extract_audio_embeddings.py")
         result = subprocess.run([
             sys.executable, script_path, audio_folder,
             '--output_csv', os.path.join(audio_folder, 'audio_embeddings.csv')
@@ -95,8 +98,8 @@ def extract_audio_embeddings(audio_folder):
 def process_audio_embeddings(embeddings_path):
     """Processes audio embeddings using the preprocessing script"""
     try:
-        script_path = r"/NeuroXVocal/src/data_processing/preprocess_audio_emb.py"
-        scaler_path = r"/NeuroXVocal/src/inference/scaler_params_audio_emb.pkl"
+        script_path = str(_BASE_DIR / "src" / "data_processing" / "preprocess_audio_emb.py")
+        scaler_path = str(_BASE_DIR / "src" / "inference" / "scaler_params_audio_emb.pkl")
         output_path = os.path.join(os.path.dirname(embeddings_path), 'audio_embeddings_processed.csv')
         
         result = subprocess.run([
@@ -124,9 +127,9 @@ def create_llm_features(csv_path):
 def process_audio_features(csv_path):
     """Processes audio features using the external preprocessing script"""
     try:
-        script_path = r"/NeuroXVocal/src/data_processing/preprocess_audio_features.py"
+        script_path = str(_BASE_DIR / "src" / "data_processing" / "preprocess_audio_features.py")
         output_dir = os.path.dirname(csv_path)
-        scaler_path = r"/NeuroXVocal/src/inference/scaler_params_audio_features.pkl"
+        scaler_path = str(_BASE_DIR / "src" / "inference" / "scaler_params_audio_features.pkl")
         
         temp_output_dir = os.path.join(output_dir, 'temp_processed')
         os.makedirs(temp_output_dir, exist_ok=True)
@@ -152,7 +155,7 @@ def process_audio_features(csv_path):
 def process_text(text_path):
     """Processes text using the external preprocessing script"""
     try:
-        script_path = r"/NeuroXVocal/src/data_processing/preprocess_texts.py"
+        script_path = str(_BASE_DIR / "src" / "data_processing" / "preprocess_texts.py")
         input_dir = os.path.dirname(text_path)
         
         temp_output_dir = os.path.join(input_dir, 'temp_processed')
@@ -197,7 +200,7 @@ def analyze_audio():
             st.write(result["text"])
         
         with st.spinner("Processing audio..."):
-            feature_script = r"/NeuroXVocal/src/data_extraction/extract_audio_features.py"
+            feature_script = str(_BASE_DIR / "src" / "data_extraction" / "extract_audio_features.py")
             features_path = os.path.join(audio_folder, 'audio_features.csv')
             
             subprocess.run([
