@@ -25,7 +25,7 @@ def train_model(
 
 
 
-    kfold = KFold(n_splits=num_folds, shuffle=True)
+    kfold = KFold(n_splits=num_folds, shuffle=True, random_state=42)
 
     for fold, (train_indices, val_indices) in enumerate(kfold.split(full_dataset)):
         print(f'Fold {fold+1}/{num_folds}')

@@ -1,11 +1,25 @@
 import torch
+import random
+import numpy as np
 from config import *
 from data_loader import create_full_dataset
 from models import NeuroXVocal
 from train import train_model
 import torch.nn as nn
 
+SEED = 42
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
 def main():
+    set_seed(SEED)
+    print(f"Random seed set to {SEED}")
     print("Starting k-fold cross-validation training script...")
     with open(LOG_PATH, 'w') as f:
         pass 
